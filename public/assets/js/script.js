@@ -33,9 +33,22 @@ var fetchCall = function(addUrl) {
         )
         .catch(function(error) {
             console.log("Error fetch ", error);
-        });
+        })
 };
 
 var checkData = function() {
 
 };
+
+
+function ajaxCallToObject(objectName) {
+    $.ajax({
+        url: basicUrl + objectName,
+        success: function(result) {
+            printObject(result, "#" + objectName);
+
+            console.log(Object.values(result)[0]);
+
+        }
+    });
+}
