@@ -1,7 +1,7 @@
 {
     "Plants": [{
             "id": 1,
-            "name": "//todo",
+            "name": "Spaanse Aak",
             "latin": "Acer Campestre",
             "image": "//todo",
             "age": {
@@ -16,7 +16,7 @@
         },
         {
             "id": 2,
-            "name": "//todo",
+            "name": "Zwarte Els",
             "latin": "Alnus Glutinosa",
             "image": " //todo",
             "age": "1+1",
@@ -28,7 +28,7 @@
         },
         {
             "id": 3,
-            "name": "//todo",
+            "name": "Buksboom",
             "latin": "Buxus Sempervirens",
             "image": " //todo",
             "age": {
@@ -43,7 +43,7 @@
         },
         {
             "id": 4,
-            "name": "//todo",
+            "name": "Haagbeuk",
             "latin": "Carpinus Betulus",
             "image": "//todo",
             "age": {
@@ -64,7 +64,7 @@
         },
         {
             "id": 5,
-            "name": "//todo",
+            "name": "Hazelaar",
             "latin": "Corylus Avellana",
             "image": "//todo",
             "age": "1+1",
@@ -75,7 +75,7 @@
         },
         {
             "id": 6,
-            "name": "//todo",
+            "name": "Eensteilige Meidoorn",
             "latin": "Crataegus Monogyna",
             "image": "//todo",
             "age": "1+1",
@@ -87,7 +87,7 @@
         },
         {
             "id": 7,
-            "name": "//todo",
+            "name": "Wilde Kardinaalmuts",
             "latin": "Euonymus Europaeus",
             "image": "//todo",
             "age": "1+1",
@@ -95,7 +95,7 @@
         },
         {
             "id": 8,
-            "name": "//todo",
+            "name": "Beukenhaag",
             "latin": "Fagus Sylvatica",
             "image": "//todo",
             "age": {
@@ -117,7 +117,7 @@
         },
         {
             "id": 9,
-            "name": "//todo",
+            "name": "Rode Beuk",
             "latin": "Fagus Silvatica Purpurea",
             "image": "//todo",
             "age": "1+2",
@@ -131,7 +131,7 @@
         },
         {
             "id": 10,
-            "name": "//todo",
+            "name": "Ligusterhaag",
             "latin": "Ligustrum Ovalifolium",
             "image": "//todo",
             "age": {

@@ -11,6 +11,7 @@ $(document).ready(function() {
 
     //reload page 
     $("#reloadPageBtn").on('click', reloadPage);
+    ajaxCallToObject();
 });
 
 var reloadPage = function() {
@@ -46,9 +47,7 @@ function ajaxCallToObject(objectName) {
         url: basicUrl + objectName,
         success: function(result) {
             printObject(result, "#" + objectName);
-
             console.log(Object.values(result)[0]);
-
         }
     });
 }
