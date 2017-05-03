@@ -1,0 +1,530 @@
+/*---------------------*/
+
+
+/*    HTML ELEMENTS    */
+
+
+/*---------------------*/
+
+body {
+    font-size: 1rem;
+    color: #5f5352;
+    background-color: #FFFFFF;
+}
+
+a {
+    text-decoration: none;
+}
+
+* {
+    cursor: url("../media/treeCursor.png"), auto;
+}
+
+
+/*---------------------*/
+
+
+/*       SCROLL        */
+
+
+/*---------------------*/
+
+::-webkit-scrollbar {
+    width: 12px;
+    display: none;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+
+/*---------------------*/
+
+
+/*  REUSABLE CLASSES   */
+
+
+/*---------------------*/
+
+.container {
+    width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cf {
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cf:before,
+.cf:after {
+    display: table;
+    content: "";
+}
+
+.cf:after {
+    clear: both;
+}
+
+.fotosOverOns img {
+    box-shadow: 6px 8px 20px rgba(51, 53, 55, 0.17);
+    width: 220px;
+    float: left;
+    margin: 10px;
+}
+
+.overOnsParagraaf {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.indrijvenEen img {
+    margin-top: 55px;
+    float: left;
+    box-shadow: 6px 8px 20px rgba(51, 53, 55, 0.17);
+}
+
+.indrijvenEenParagraaf {
+    float: right;
+    width: 470px;
+    font-size: 1.1rem;
+    line-height: 130%;
+}
+
+.fotoImg img {
+    float: left;
+    box-shadow: 6px 8px 20px rgba(51, 53, 55, 0.17);
+}
+
+.overOnsImg img {
+    margin-top: 10px;
+    margin-left: 27%;
+    margin-bottom: 10px;
+    box-shadow: 6px 8px 20px rgba(51, 53, 55, 0.17);
+}
+
+.tips {
+    margin-top: 10px;
+    float: left;
+    width: 470px;
+    font-size: 1rem;
+    line-height: 130%;
+}
+
+.last {
+    margin-bottom: 15px;
+}
+
+
+/*---------------------*/
+
+
+/* CONTAINING ELEMENTS */
+
+
+/*---------------------*/
+
+header {
+    background: url(../media/loods.jpg) no-repeat 0;
+    /*background-size: cover;*/
+    box-shadow: 6px 2px 40px rgba(51, 53, 55, 0.4);
+    color: #FFFFFF;
+    text-align: center;
+    padding-top: 116px;
+    padding-bottom: 20px;
+    margin-bottom: 25px;
+}
+
+header img {
+    position: relative;
+    float: left;
+    top: -100px;
+    left: 15px;
+}
+
+header h1 {
+    font-size: 2rem !important;
+    font-style: italic;
+    margin-bottom: 14px;
+    margin-top: 75px;
+    color: #FFFFFF;
+}
+
+header h2 {
+    font-size: 1.4rem !important;
+    /*margin-bottom: 51px;
+    padding-left: 115px;
+    padding-right: 115px;*/
+    /*width: 242px;*/
+    /*margin-left: auto !important;
+    margin-right: auto !important;*/
+    color: #FFFFFF;
+}
+
+header nav li {
+    display: inline;
+    letter-spacing: 0.2rem;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+}
+
+header nav li a {
+    color: #FFFFFF !important;
+    text-transform: capitalize;
+}
+
+header nav li a:hover {
+    background-color: green;
+}
+
+header nav li:not(:last-child):after {
+    color: #FFFFFF;
+    content: "|";
+    font-size: 1rem;
+    vertical-align: top;
+}
+
+
+/*
+header nav li:last-child:after {
+    content : ""
+}*/
+
+
+/*
+header nav li.last:after {
+    content: ""
+}*/
+
+article {
+    text-align: center;
+}
+
+article h2 {
+    font-size: 2.2rem;
+    letter-spacing: 0.3rem;
+    background-color: #e1ede7;
+    background-clip: content-box;
+    margin: 15px 0px 15px 0px;
+    padding: 6px 6px 4px 1px;
+    display: inline-block;
+    border-top: solid 1px #5f5352;
+}
+
+article h3 {
+    font-size: 1.6rem;
+    letter-spacing: 0.3rem;
+    margin: 15px auto 15px auto;
+    padding: 6px 6px 4px 1px;
+    text-align: center;
+}
+
+article p {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+article div img {
+    width: 450px;
+    margin-top: 10px;
+}
+
+section {
+    background-color: #aea8a8;
+    color: #FFFFFF;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+section h2 {
+    text-transform: uppercase;
+    font-size: 1.8rem;
+    margin-bottom: 45px;
+}
+
+section h3 {
+    font-size: 1.2rem;
+    padding-top: 30px;
+    padding-bottom: 37px;
+    /*background: url("../media/swirl.png") -12px -20px;*/
+}
+
+section p {
+    padding-bottom: 30px;
+}
+
+section .container {
+    position: relative;
+}
+
+section #award {
+    position: absolute;
+    top: -35px;
+    right: 40px;
+    /*background: url(../media/wreath.png) no-repeat top left;*/
+    width: 94px;
+    height: 65px;
+    padding-top: 19px;
+    text-align: center;
+    font-size: 0.7rem;
+}
+
+section #award span {
+    display: block;
+}
+
+section #award a {
+    text-decoration: none;
+    color: #FFFFFF;
+    /*#D0CE13*/
+}
+
+
+/* --- Menu --- */
+
+section article {
+    width: 313px;
+    float: left;
+    margin-right: 10px;
+}
+
+section article:last-child {
+    margin-right: 0;
+}
+
+section article h3 {
+    font-size: 1.5rem;
+}
+
+section article h4 {
+    font-size: 1.2rem;
+}
+
+section article p span {
+    display: inline-block;
+}
+
+footer {
+    margin-top: 30px;
+}
+
+footer div {
+    width: 26%;
+    float: left;
+    padding-left: 6%;
+    text-align: center;
+}
+
+footer ul li a {
+    text-decoration: none;
+    line-height: 25px;
+    color: #57A38A;
+    padding-left: 22px;
+    display: inline-block;
+    margin-bottom: 3px;
+    font-size: 0.8rem;
+}
+
+
+/*footer .fb {
+    background: url(../media/icons.png) no-repeat -5px -8px;
+    background-size: 23px 102px;
+    margin-right: auto;
+    margin-left: auto;
+    width: 23px;
+}*/
+
+
+/*footer .tw {*/
+
+
+/*background-image: url(../media/icons.png);*/
+
+
+/*background-repeat: no-repeat;*/
+
+
+/*background-position: -5px -35px;*/
+
+
+/*background-size: 23px 102px;*/
+
+
+/*}*/
+
+
+/*footer .em {
+    background: url(../media/icons.png) no-repeat -5px -66px;
+    background-size: 23px 102px;
+}*/
+
+footer dl {
+    line-height: 130%;
+    font-size: 0.9rem;
+}
+
+footer dl dd {
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+footer div:last-child {
+    margin-right: 0;
+}
+
+footer div h2 {
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+    letter-spacing: 0.2rem;
+}
+
+footer div h2,
+li {
+    line-height: 160%;
+}
+
+strong {
+    font-weight: bold;
+}
+
+footer address {
+    font-size: 0.8rem;
+}
+
+
+/*------------------------*/
+
+
+/* PAGE SPECIFIC ELEMENTS */
+
+
+/*------------------------*/
+
+.enlarge {
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.enlarge:hover {
+    opacity: 0.7;
+}
+
+
+/* The Modal (background) */
+
+.modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    padding-top: 100px;
+    /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.9);
+    /* Black w/ opacity */
+}
+
+
+/* Modal Content (image) */
+
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+}
+
+
+/* Caption of Modal Image */
+
+#caption {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    text-align: center;
+    color: #ccc;
+    padding: 10px 0;
+    height: 150px;
+}
+
+
+/* Add Animation */
+
+.modal-content,
+#caption {
+    -webkit-animation-name: zoom;
+    -webkit-animation-duration: 0.6s;
+    animation-name: zoom;
+    animation-duration: 0.6s;
+}
+
+@-webkit-keyframes zoom {
+    from {
+        -webkit-transform: scale(0)
+    }
+    to {
+        -webkit-transform: scale(1)
+    }
+}
+
+@keyframes zoom {
+    from {
+        transform: scale(0)
+    }
+    to {
+        transform: scale(1)
+    }
+}
+
+
+/* The Close Button */
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+/* 100% Image Width on Smaller Screens */
+
+@media only screen and (max-width: 700px) {
+    .modal-content {
+        width: 100%;
+    }
+}
