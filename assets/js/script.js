@@ -6,8 +6,8 @@ $(document).ready(function() {
     console.log("js connected");
 
     //load header/footer
-    $("#header").load("/html/header.html");
-    $("#footer").load("/html/footer.html");
+    // $("#header").load("/html/header.html");
+    // $("#footer").load("/html/footer.html");
 
     //reload page 
     $("#reloadPageBtn").on('click', reloadPage);
