@@ -23,7 +23,6 @@ var reloadPage = function() {
 
 function requestPlants(start) {
     var end = start + 6;
-    console.log("ajaxRequestPlants");
     $.ajax({
         type: "post",
         contentType: "application/json",
@@ -37,6 +36,14 @@ function requestPlants(start) {
         console.log(data);
         data.plants.forEach(function(plant) {
             var html = "";
+            if (counter == 0) {
+                html += "<div class='ui-block-a'>";
+                counter++;
+            } else {
+                html += "<div class='ui-block-b'>";
+                counter--;
+            }
+            html += "<a href='#' class='ui-btn ui-corner-all ui-shadow'>" + plant.name + "</a></div>";
 
             $("#plants").append(html);
         });

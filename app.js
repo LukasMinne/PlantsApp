@@ -79,16 +79,14 @@ app.post('/load_plants', function(req, res) {
 // };
 
 getPlants = (start, end) => {
-    console.log("getplants");
     return new Promise(function(resolve) {
         var statement = 'select * from plants limit ?,?';
         connection.query(statement, [start, end], function(error, results, fields) {
             if (error) throw error;
-            console.log(results);
             resolve(results);
         });
     });
-    connection.end();
+    // connection.end();
 };
 
 
