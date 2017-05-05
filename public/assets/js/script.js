@@ -1,5 +1,5 @@
 "use strict";
-var basicUrl = "http://www.localhost:3000";
+// var basicUrl = "http://www.localhost:3000";
 
 $(document).ready(function() {
     //check jsfile
@@ -11,7 +11,7 @@ $(document).ready(function() {
 
     //reload page 
     $("#reloadPageBtn").on('click', reloadPage);
-    ajaxCallToObject();
+    // ajaxCallToObject();
 });
 
 var reloadPage = function() {
@@ -19,35 +19,35 @@ var reloadPage = function() {
 };
 
 
-var fetchCall = function(addUrl) {
-    fetch(basicUrl + addUrl)
-        .then(
-            function(response) {
-                if (!response.ok) {
-                    console.log("There is a problem with fetchCall. Error: " + response.status);
-                    return;
-                }
-                response.json().then(function(data) {
-                    console.log(data);
-                });
-            }
-        )
-        .catch(function(error) {
-            console.log("Error fetch ", error);
-        })
-};
+// var fetchCall = function(addUrl) {
+//     fetch(basicUrl + addUrl)
+//         .then(
+//             function(response) {
+//                 if (!response.ok) {
+//                     console.log("There is a problem with fetchCall. Error: " + response.status);
+//                     return;
+//                 }
+//                 response.json().then(function(data) {
+//                     console.log(data);
+//                 });
+//             }
+//         )
+//         .catch(function(error) {
+//             console.log("Error fetch ", error);
+//         })
+// };
 
-var checkData = function() {
+// var checkData = function() {
 
-};
+// };
 
 
-function ajaxCallToObject(objectName) {
-    $.ajax({
-        url: basicUrl + objectName,
-        success: function(result) {
-            printObject(result, "#" + objectName);
-            console.log(Object.values(result)[0]);
-        }
-    });
-}
+// function ajaxCallToObject(objectName) {
+//     $.ajax({
+//         url: basicUrl + objectName,
+//         success: function(result) {
+//             printObject(result, "#" + objectName);
+//             console.log(Object.values(result)[0]);
+//         }
+//     });
+// }
