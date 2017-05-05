@@ -8,8 +8,8 @@ var mysql = require("mysql");
 //mysql
 var connection = mysql.createConnection({
     host: 'localhost',
-    user: 'user',
-    password: 'userpasswd',
+    user: 'plantuser',
+    password: 'plants',
     database: 'plantsDB'
 });
 
@@ -42,18 +42,27 @@ app.get('/route', function(req, response) {
     response.render('route.html', {});
 });
 
-app.post('/load_locations', function(req, res) {
+// app.post('/load_locations', function(req, res) {
+//     console.log(req.body);
+//     var locations = getLocations(req.body.start, req.body.end);
+
+//     locations.then(function(results) {
+//         res.json({
+//             locations: results
+//         });
+//     });
+// })
+
+app.post('/load_plants', function(req, res) {
     console.log(req.body);
-    var locations = getLocations(req.body.start, req.body.end);
-
-    locations.then(function(results) {
+    var plants = getPlants(req.body.start, req.body.end);
+    plants.then(function(results) {
+        console.log(results);
         res.json({
-            locations: results
-        });
-    });
+            plants: results
+        })
+    })
 })
-
-
 
 
 //sql functions
@@ -69,19 +78,18 @@ app.post('/load_locations', function(req, res) {
 //     connection.end();
 // };
 
-// getLocations = (start, end) => {
-//     return new Promise(function(resolve) {
-//         var statement = 'Select * from locations limit ?,?';
-//         connection.query(statement, [start, end], function(error, results, fields) {
-//             if (error) throw error;
-//             resolve(results);
-//         });
-//     });
-
-
-//     connection.end();
-// };
-
+getPlants = (start, end) => {
+    console.log("getplants");
+    return new Promise(function(resolve) {
+        var statement = 'select * from plants limit ?,?';
+        connection.query(statement, [start, end], function(error, results, fields) {
+            if (error) throw error;
+            console.log(results);
+            resolve(results);
+        });
+    });
+    connection.end();
+};
 
 
 var server = http.createServer(app);

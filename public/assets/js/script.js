@@ -1,5 +1,7 @@
 "use strict";
-// var basicUrl = "http://www.localhost:3000";
+
+var counter = 0;
+var grid = ["a", "b"];
 
 $(document).ready(function() {
     //check jsfile
@@ -11,43 +13,32 @@ $(document).ready(function() {
 
     //reload page 
     $("#reloadPageBtn").on('click', reloadPage);
-    // ajaxCallToObject();
+
+    requestPlants(0);
 });
 
 var reloadPage = function() {
     window.location.reload();
 };
 
+function requestPlants(start) {
+    var end = start + 6;
+    console.log("ajaxRequestPlants");
+    $.ajax({
+        type: "post",
+        contentType: "application/json",
+        url: "/load_plants",
+        // timeout: 3600 * 5,
+        data: JSON.stringify({
+            start,
+            end
+        })
+    }).success(function(data) {
+        console.log(data);
+        data.plants.forEach(function(plant) {
+            var html = "";
 
-// var fetchCall = function(addUrl) {
-//     fetch(basicUrl + addUrl)
-//         .then(
-//             function(response) {
-//                 if (!response.ok) {
-//                     console.log("There is a problem with fetchCall. Error: " + response.status);
-//                     return;
-//                 }
-//                 response.json().then(function(data) {
-//                     console.log(data);
-//                 });
-//             }
-//         )
-//         .catch(function(error) {
-//             console.log("Error fetch ", error);
-//         })
-// };
-
-// var checkData = function() {
-
-// };
-
-
-// function ajaxCallToObject(objectName) {
-//     $.ajax({
-//         url: basicUrl + objectName,
-//         success: function(result) {
-//             printObject(result, "#" + objectName);
-//             console.log(Object.values(result)[0]);
-//         }
-//     });
-// }
+            $("#plants").append(html);
+        });
+    })
+}
