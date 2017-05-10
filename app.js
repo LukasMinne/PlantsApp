@@ -42,34 +42,57 @@ app.get('/route', function(req, response) {
     response.render('route.html', {});
 });
 
-// app.post('/load_locations', function(req, res) {
-//     console.log(req.body);
-//     var locations = getLocations(req.body.start, req.body.end);
-
-//     locations.then(function(results) {
-//         res.json({
-//             locations: results
-//         });
-//     });
-// })
-
 app.post('/load_plants', function(req, res) {
     console.log(req.body);
     var plants = getPlants(req.body.start, req.body.end);
     plants.then(function(results) {
-        console.log(results);
+        // connection.end();
         res.json({
             plants: results
         })
     })
-})
+});
+
+app.post('/register_user', function(req, res) {
+    console.log(req.body);
+    var user = registerUser(req.body.user, req.body.pass, req.body.email);
+    user.then(function(results) {
+        // res.json({
+        //     plants: results
+        // })
+        console.log("");
+    })
+});
 
 
 //sql functions
 
+//registratie
+//1. user input checken.
+//2. nieuwe user opslaan
+
+registerUser = (user, pass, email) => {
+    return new Promise(function(resolve) {
+        var statement = 'insert into user(name, password, email) values (?,?,?)';
+        // var user;
+        connection.query(statement, [user, pass, email], function(error, results, fields) {
+            if (error) throw error;
+            resolve({
+                username: user,
+                password: pass
+            });
+        });
+    });
+};
+
+//3. doorsturen naar ingelogd.
+
+
+//inloggen
+
 // checkLogin = (username, password) => {
 
-//     var statement = 'Select * from accounts where username=?';
+//     var statement = 'select * from user where username=?';
 //     connection.query(statement, [username], function(error, results, fields) {
 //         if (error) throw error;
 //         console.log(results[0].password == password);
@@ -83,10 +106,13 @@ getPlants = (start, end) => {
         var statement = 'select * from plants limit ?,?';
         connection.query(statement, [start, end], function(error, results, fields) {
             if (error) throw error;
+            // console.log(results);
             resolve(results);
         });
+        // connection.end();       
     });
-    // connection.end();
+
+
 };
 
 
