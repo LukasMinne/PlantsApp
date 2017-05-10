@@ -3,6 +3,8 @@ var http = require('http');
 var express = require('express');
 var app = express();
 var mysql = require("mysql");
+var bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 
 //mysql
@@ -21,7 +23,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-
+// routes 
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/public/html');
@@ -60,7 +62,18 @@ app.post('/register_user', function(req, res) {
         // res.json({
         //     plants: results
         // })
-        console.log("");
+        res.json("register OK");
+    })
+});
+
+app.post('/login_user', function(req, res) {
+    console.log(req.body);
+    var user = registerUser(req.body.email, req.body.pass);
+    user.then(function(results) {
+        // res.json({
+        //     plants: results
+        // })
+        res.json("login OK");
     })
 });
 
@@ -73,13 +86,16 @@ app.post('/register_user', function(req, res) {
 
 registerUser = (user, pass, email) => {
     return new Promise(function(resolve) {
-        var statement = 'insert into user(name, password, email) values (?,?,?)';
-        // var user;
-        connection.query(statement, [user, pass, email], function(error, results, fields) {
-            if (error) throw error;
-            resolve({
-                username: user,
-                password: pass
+        bcrypt.hash(pass, saltRounds).then(function(hash) {
+            // Store hash in your password DB. 
+            var statement = 'insert into user(name, password, email) values (?,?,?)';
+            // var user;
+            connection.query(statement, [user, hash, email], function(error, results, fields) {
+                if (error) throw error;
+                resolve({
+                    username: user,
+                    password: pass
+                });
             });
         });
     });
@@ -90,16 +106,32 @@ registerUser = (user, pass, email) => {
 
 //inloggen
 
-// checkLogin = (username, password) => {
+loginUser = (email, pass) => {
+    return new Promise(function(resolve) {
+        var statement = 'select password from user where email = ?';
+        bcrypt.compare(pass, hash).then(function(res) {
+            // compare hash from database
+            if (res == true) {
+                //login correct
+                console.log("juist");
 
-//     var statement = 'select * from user where username=?';
-//     connection.query(statement, [username], function(error, results, fields) {
-//         if (error) throw error;
-//         console.log(results[0].password == password);
-//     });
+            } else {
+                //passwoord fout
+                console.log("fout");
 
-//     connection.end();
-// };
+            }
+
+            // var user;
+            connection.query(statement, [email], function(error, results, fields) {
+                if (error) throw error;
+                resolve({
+                    username: user,
+                    password: pass
+                });
+            });
+        });
+    });
+};
 
 getPlants = (start, end) => {
     return new Promise(function(resolve) {
@@ -116,6 +148,8 @@ getPlants = (start, end) => {
 };
 
 
+
+// server
 var server = http.createServer(app);
 server.listen(8080, function() {
     console.log("listening on 8080");
