@@ -47,7 +47,6 @@ function requestPlants(start) {
             return response.json();
         })
         .then(function(data) {
-            console.log(data);
             //iterate over plants
             data.plants.forEach(function(plant) {
                 var html = "";
@@ -93,9 +92,6 @@ function registerUser(e) {
         $("#placeholderUsername").html("Welkom " + username);
         $("#login").toggle();
         $("#logout").show();
-        //popup naam
-        //logout button
-        //$("aside").toggle("");
     })
 };
 
@@ -112,14 +108,11 @@ function loginUser(e) {
         data: JSON.stringify(jsonForm)
     }).success(function(data) {
         $("#popupLogin").popup("close");
+        var username = data.username;
+        $("#placeholderUsername").html("Welkom " + username);
         $("#login").toggle();
         $("#logout").show();
         console.log(data);
-        //popup naam
-        //id van naam uit login form? zelfde bij register ---------------------------------------------------------------
-        console.log($("#usernameLogin"));
-        //logout button
-        //$("aside").toggle("");
     })
 };
 

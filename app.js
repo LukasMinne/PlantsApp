@@ -58,6 +58,7 @@ app.post('/register_user', function(req, res) {
     var user = registerUser(req.body.user, req.body.pass, req.body.email);
     user.then(function(results) {
         res.json("register OK");
+
     })
 });
 
@@ -70,9 +71,8 @@ app.post('/login_user', function(req, res) {
                 //login correct
                 console.log("juist");
                 res.json({
-                    username: result.name,
-                    password: result.password,
-                    email: result.email
+                    username: results[0].name
+                        // email: results[0].email
                 })
 
             } else {
