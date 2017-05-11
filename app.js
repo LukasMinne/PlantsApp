@@ -65,12 +65,28 @@ app.post('/register_user', function(req, res) {
 
 app.post('/login_user', function(req, res) {
     console.log(req.body);
-    var user = loginUser(req.body.email, req.body.pass);
+    var user = loginUser(req.body.user, req.body.pass);
     user.then(function(results) {
-        res.json("login OK");
-    })
-});
+        bcrypt.compare(req.body.pass, results[0].password).then(function(result) {
 
+            // compare hash from database
+            if (result == true) {
+                //login correct
+                console.log("juist");
+                res.json({
+                    username: result.name,
+                    password: result.password,
+                    email: result.email
+                })
+
+            } else {
+                //passwoord fout
+                console.log("fout");
+
+            }
+        })
+    });
+});
 
 //sql functions
 
@@ -102,31 +118,12 @@ registerUser = (user, pass, email) => {
 
 loginUser = (email, pass) => {
     return new Promise(function(resolve) {
-        var statement = 'select password from user where email = ?';
-        //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --allles uit database dus ook naam of beter enkle pass
-
+        // console.log(email, pass);
+        var statement = 'select * from user where email = ?';
         connection.query(statement, [email], function(error, results, fields) {
             if (error) throw error;
-            console.log("fields : " + fields);
-            console.log("userpassword : " + pass);
-            console.log("statement : " + statement);
-            bcrypt.compare(pass, statement).then(function(res) {
-                // compare hash from database
-                //compare werkt
-                if (res == true) {
-                    //login correct
-                    console.log("juist");
-
-                } else {
-                    //passwoord fout
-                    console.log("fout");
-
-                }
-                resolve({
-                    username: user,
-                    password: pass
-                });
-            });
+            console.log("results from database " + results);
+            resolve(results);
         });
     });
 };

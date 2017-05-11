@@ -5,7 +5,7 @@ var grid = ["a", "b"];
 
 $(document).ready(function() {
     //check jsfile
-    console.log("js connected");
+    // console.log("js connected");
 
     //reload page 
     $("#reloadPageBtn").on('click', reloadPage);
@@ -26,6 +26,8 @@ $(document).ready(function() {
     //hide logout button
     $("#logout").hide();
     $("#logout").on("click", logoutUser);
+
+    registerServiceWorker();
 });
 
 var reloadPage = function() {
@@ -130,29 +132,17 @@ function logoutUser(e) {
 }
 
 
-
-
-// var marker;
-
-// function initMap() {
-//     var map = new google.maps.Map(document.getElementById('map'), {
-//         zoom: 13,
-//         center: { lat: 59.325, lng: 18.070 }
-//     });
-
-//     marker = new google.maps.Marker({
-//         map: map,
-//         draggable: true,
-//         animation: google.maps.Animation.DROP,
-//         position: { lat: 59.327, lng: 18.067 }
-//     });
-//     marker.addListener('click', toggleBounce);
-// }
-
-// function toggleBounce() {
-//     if (marker.getAnimation() !== null) {
-//         marker.setAnimation(null);
-//     } else {
-//         marker.setAnimation(google.maps.Animation.BOUNCE);
-//     }
-// }
+// service worker
+var registerServiceWorker = function() {
+    //     if ('serviceWorker' in navigator && 'PushManager' in window) {
+    //         navigator.serviceWorker.register('sw.js')
+    //             .then(function(sw) {
+    //                 console.log("Service worker registered", sw);
+    //             })
+    //             .catch(function(error) {
+    //                 console.error('Service worker error', error);
+    //             });
+    //     } else {
+    //         console.warn('Push messaging is not supported');
+    //     }
+};
