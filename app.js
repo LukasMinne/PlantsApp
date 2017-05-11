@@ -59,20 +59,14 @@ app.post('/register_user', function(req, res) {
     console.log(req.body);
     var user = registerUser(req.body.user, req.body.pass, req.body.email);
     user.then(function(results) {
-        // res.json({
-        //     plants: results
-        // })
         res.json("register OK");
     })
 });
 
 app.post('/login_user', function(req, res) {
     console.log(req.body);
-    var user = registerUser(req.body.email, req.body.pass);
+    var user = loginUser(req.body.email, req.body.pass);
     user.then(function(results) {
-        // res.json({
-        //     plants: results
-        // })
         res.json("login OK");
     })
 });
@@ -108,23 +102,26 @@ registerUser = (user, pass, email) => {
 
 loginUser = (email, pass) => {
     return new Promise(function(resolve) {
-        var statement = 'select * from user where email = ?';
+        var statement = 'select password from user where email = ?';
         //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --allles uit database dus ook naam of beter enkle pass
-        bcrypt.compare(pass, hash).then(function(res) {
-            // compare hash from database
-            if (res == true) {
-                //login correct
-                console.log("juist");
 
-            } else {
-                //passwoord fout
-                console.log("fout");
+        connection.query(statement, [email], function(error, results, fields) {
+            if (error) throw error;
+            console.log("fields : " + fields);
+            console.log("userpassword : " + pass);
+            console.log("statement : " + statement);
+            bcrypt.compare(pass, statement).then(function(res) {
+                // compare hash from database
+                //compare werkt
+                if (res == true) {
+                    //login correct
+                    console.log("juist");
 
-            }
+                } else {
+                    //passwoord fout
+                    console.log("fout");
 
-            // var user;
-            connection.query(statement, [email], function(error, results, fields) {
-                if (error) throw error;
+                }
                 resolve({
                     username: user,
                     password: pass
