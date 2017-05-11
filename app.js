@@ -108,7 +108,8 @@ registerUser = (user, pass, email) => {
 
 loginUser = (email, pass) => {
     return new Promise(function(resolve) {
-        var statement = 'select password from user where email = ?';
+        var statement = 'select * from user where email = ?';
+        //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --allles uit database dus ook naam of beter enkle pass
         bcrypt.compare(pass, hash).then(function(res) {
             // compare hash from database
             if (res == true) {

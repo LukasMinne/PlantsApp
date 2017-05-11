@@ -22,6 +22,10 @@ $(document).ready(function() {
     //login and register
     $("#popupRegister button").on("click", registerUser);
     $("#popupLogin button").on("click", loginUser);
+
+    //hide logout button
+    $("#logout").hide();
+    $("#logout").on("click", logoutUser);
 });
 
 var reloadPage = function() {
@@ -42,16 +46,8 @@ function requestPlants(start) {
         })
         .then(function(data) {
             console.log(data);
-            // $.each(data["plants"], function(key, value) {
-            //     console.log(key + " " + value);
-            // });
             //iterate over plants
-            for (var plant in data) {
-                // data.plants.foreEach(function(plant) {
-                // for (var kleinePlant in plant) {
-                //     console.log(kleinePlant.name);
-                // }
-
+            data.plants.forEach(function(plant) {
                 var html = "";
                 if (counter == 0) {
                     html += "<div class='ui-block-a'>";
@@ -73,8 +69,8 @@ function requestPlants(start) {
                     "</form>" +
                     "</div>";
                 $("#plants").append(html).enhanceWithin();
-            }
-        })
+            });
+        });
 };
 
 
@@ -91,7 +87,10 @@ function registerUser(e) {
         data: JSON.stringify(jsonForm)
     }).success(function(data) {
         $("#popupRegister").popup("close");
-        $("aside").toggle();
+        var username = $("#usernameRegister").val();
+        $("#placeholderUsername").html("Welkom " + username);
+        $("#login").toggle();
+        $("#logout").show();
         //popup naam
         //logout button
         //$("aside").toggle("");
@@ -111,13 +110,24 @@ function loginUser(e) {
         data: JSON.stringify(jsonForm)
     }).success(function(data) {
         $("#popupLogin").popup("close");
-        $("aside").toggle();
+        $("#login").toggle();
+        $("#logout").show();
         console.log(data);
         //popup naam
+        //id van naam uit login form? zelfde bij register ---------------------------------------------------------------
+        console.log($("#usernameLogin"));
         //logout button
         //$("aside").toggle("");
     })
 };
+
+function logoutUser(e) {
+    e.preventDefault();
+    $("#placeholderUsername").html("");
+    $("#login").toggle();
+    $("#logout").toggle();
+
+}
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
