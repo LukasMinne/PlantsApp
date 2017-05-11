@@ -45,10 +45,8 @@ app.get('/route', function(req, response) {
 });
 
 app.post('/load_plants', function(req, res) {
-    console.log(req.body);
     var plants = getPlants(req.body.start, req.body.end);
     plants.then(function(results) {
-        // connection.end();
         res.json({
             plants: results
         })
@@ -64,11 +62,9 @@ app.post('/register_user', function(req, res) {
 });
 
 app.post('/login_user', function(req, res) {
-    console.log(req.body);
     var user = loginUser(req.body.user, req.body.pass);
     user.then(function(results) {
         bcrypt.compare(req.body.pass, results[0].password).then(function(result) {
-
             // compare hash from database
             if (result == true) {
                 //login correct
@@ -99,7 +95,6 @@ registerUser = (user, pass, email) => {
         bcrypt.hash(pass, saltRounds).then(function(hash) {
             // Store hash in your password DB. 
             var statement = 'insert into user(name, password, email) values (?,?,?)';
-            // var user;
             connection.query(statement, [user, hash, email], function(error, results, fields) {
                 if (error) throw error;
                 resolve({
@@ -133,16 +128,10 @@ getPlants = (start, end) => {
         var statement = 'select * from plants limit ?,?';
         connection.query(statement, [start, end], function(error, results, fields) {
             if (error) throw error;
-            // console.log(results);
             resolve(results);
         });
-        // connection.end();       
     });
-
-
 };
-
-
 
 // server
 var server = http.createServer(app);

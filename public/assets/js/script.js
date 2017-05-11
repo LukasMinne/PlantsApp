@@ -5,7 +5,7 @@ var grid = ["a", "b"];
 
 $(document).ready(function() {
     //check jsfile
-    // console.log("js connected");
+    console.log("js connected");
 
     //reload page 
     $("#reloadPageBtn").on('click', reloadPage);
