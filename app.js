@@ -65,22 +65,24 @@ app.post('/register_user', function(req, res) {
 app.post('/login_user', function(req, res) {
     var user = loginUser(req.body.user, req.body.pass);
     user.then(function(results) {
-        bcrypt.compare(req.body.pass, results[0].password).then(function(result) {
-            // compare hash from database
-            if (result == true) {
-                //login correct
-                console.log("juist");
-                res.json({
-                    username: results[0].name
-                        // email: results[0].email
-                })
+        if (results != null) { //todo fix
+            bcrypt.compare(req.body.pass, results[0].password).then(function(result) {
+                // compare hash from database
+                if (result == true) {
+                    //login correct
+                    console.log("juist");
+                    res.json({
+                        username: results[0].name
+                            // email: results[0].email
+                    })
 
-            } else {
-                //passwoord fout
-                console.log("fout");
+                } else {
+                    //passwoord fout
+                    console.log("fout");
 
-            }
-        })
+                }
+            })
+        }
     });
 });
 
@@ -92,6 +94,7 @@ app.post('/login_user', function(req, res) {
 
 registerUser = (user, pass, email) => {
     return new Promise(function(resolve) {
+
         bcrypt.hash(pass, saltRounds).then(function(hash) {
             // Store hash in your password DB. 
             var statement = 'insert into user(name, password, email) values (?,?,?)';
@@ -112,15 +115,25 @@ registerUser = (user, pass, email) => {
 //inloggen
 
 loginUser = (email, pass) => {
-    return new Promise(function(resolve) {
-        // console.log(email, pass);
-        var statement = 'select * from user where email = ?';
-        connection.query(statement, [email], function(error, results, fields) {
-            if (error) throw error;
-            console.log("results from database " + results);
-            resolve(results);
+    console.log("email login : " + email);
+    console.log("pass login : " + pass);
+    if (pass.lenght < 7 || pass.lenght > 40) { //todo fix
+        // UserSchema.path('email').validate(function(email) {
+        //     var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+        //     console.log(emailRegex.test(email.text));
+        //     return emailRegex.test(email.text); // Assuming email has a text attribute
+        // }, 'The e-mail field cannot be empty.');
+        return new Promise(function(resolve) {
+            // console.log(email, pass);
+            var statement = 'select * from user where email = ?';
+            connection.query(statement, [email], function(error, results, fields) {
+                if (error) throw error;
+                resolve(results);
+            });
         });
-    });
+    } else {
+        //resolve();
+    }
 };
 
 getPlants = (start, end) => {

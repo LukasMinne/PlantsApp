@@ -54,7 +54,7 @@
                             <label for="emailLogin" class="ui-hidden-accessible">Email:</label>
                             <input type="email" name="user" id="emailLogin" value="" placeholder="email" data-theme="a">
                             <label for="passwordLogin" class="ui-hidden-accessible">Wachtwoord:</label>
-                            <input type="password" name="pass" id="passwordLogin" value="" placeholder="wachtwoord" data-theme="a">
+                            <input type="password" name="pass" id="passwordLogin" value="" placeholder="wachtwoord" data-theme="a" minlength="7" maxlength="40">
                             <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Log in</button>
                         </div>
                     </form>
@@ -65,9 +65,9 @@
                         <div style="padding:10px 20px;">
                             <h3>Registreer hier</h3>
                             <label for="usernameRegister" class="ui-hidden-accessible">Naam:</label>
-                            <input type="text" name="user" id="usernameRegister" value="" placeholder="naam" data-theme="a">
+                            <input type="text" name="user" id="usernameRegister" value="" placeholder="naam" data-theme="a" minlength="3" maxlength="30">
                             <label for="passwordRegister" class="ui-hidden-accessible">Wachtwoord:</label>
-                            <input type="password" name="pass" id="passwordRegister" value="" placeholder="wachtwoord" data-theme="a">
+                            <input type="password" name="pass" id="passwordRegister" value="" placeholder="wachtwoord" data-theme="a" minlength="7" maxlength="40">
                             <label for="emailRegister" class="ui-hidden-accessible">Email:</label>
                             <input type="email" name="email" id="emailRegister" value="" placeholder="email" data-theme="a">
                             <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Registreer</button>
