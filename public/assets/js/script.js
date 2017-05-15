@@ -2,6 +2,9 @@
 
 var counter = 0;
 var grid = ["a", "b"];
+var email;
+var pass;
+var username;
 
 $(document).ready(function() {
     //check jsfile
@@ -30,6 +33,8 @@ $(document).ready(function() {
     registerServiceWorker();
 });
 
+
+
 var reloadPage = function() {
     window.location.reload();
 };
@@ -57,7 +62,7 @@ function requestPlants(start) {
                     html += "<div class='ui-block-b'>";
                     counter--;
                 }
-                html += "<a href='#popupPlant" + plant["id"] + "' data-rel='popup' data-position-to='window' class='ui-btn ui-corner-all ui-shadow' data-transition='pop'>" + plant["name"] + "</br>" + plant["latinName"] + "</a>" +
+                html += "<a href='#popupPlant" + plant["id"] + "' data-id='" + plant["id"] + "' data-rel='popup' data-position-to='window' class='ui-btn ui-corner-all ui-shadow popupPlants' data-transition='pop'>" + plant["name"] + "</br>" + plant["latinName"] + "</a>" +
                     "<div data-role='popup' id='popupPlant" + plant["id"] + "' data-theme='a' class='ui-corner-all'>" +
                     "<form>" +
                     "<div style='padding:10px 20px;'>" +
@@ -65,7 +70,9 @@ function requestPlants(start) {
                     "<h3>" + plant["latinName"] + "</h3>" +
                     "<h3>" + plant["age"] + "</h3>" +
                     "<h3>" + plant["size"] + "</h3>" +
-                    "<button type='submit' class='ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check'>Bestel</button>" +
+                    "<label for='slider-mini'>Hoeveelheid:</label>" +
+                    "<input type='range' name='slider-mini' id='slider-plants' value='500' min='0' max='10000' data-highlight='true' />" +
+                    "<button id='bestelPlant' data-role='button' class='ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check'>Bestel</button>" +
                     "</div>" +
                     "</form>" +
                     "</div>";
@@ -73,7 +80,6 @@ function requestPlants(start) {
             });
         });
 };
-
 
 function registerUser(e) {
     e.preventDefault();
@@ -88,7 +94,9 @@ function registerUser(e) {
         data: JSON.stringify(jsonForm)
     }).success(function(data) {
         $("#popupRegister").popup("close");
-        var username = $("#usernameRegister").val();
+        username = $("#usernameRegister").val();
+        email = jsonForm.email;
+        pass = jsonForm.pass;
         $("#placeholderUsername").html("Welkom " + username);
         $("#login").toggle();
         $("#logout").show();
@@ -108,7 +116,9 @@ function loginUser(e) {
         data: JSON.stringify(jsonForm)
     }).success(function(data) {
         $("#popupLogin").popup("close");
-        var username = data.username;
+        username = data.username;
+        email = jsonForm.email;
+        pass = jsonForm.pass;
         $("#placeholderUsername").html("Welkom " + username);
         $("#login").toggle();
         $("#logout").show();
@@ -118,11 +128,18 @@ function loginUser(e) {
 
 function logoutUser(e) {
     e.preventDefault();
-    $("#placeholderUsername").html("");
-    $("#login").toggle();
-    $("#logout").toggle();
-
-}
+    fetch("/logout", {
+            method: "post",
+            headers: new Headers({ "Content-Type": "application/json" }),
+        }).then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            $("#placeholderUsername").html("");
+            $("#login").toggle();
+            $("#logout").toggle();
+        });
+};
 
 // function validateEmail(email) {
 //     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
