@@ -28,7 +28,8 @@ $(document).ready(function() {
 
     //hide logout button
     $("#logout").hide();
-    $("#logout").on("click", logoutUser);
+    // $("#placeholderUsername").hide();
+    $("#logoutButton").on("click", logoutUser);
 
     registerServiceWorker();
 });
@@ -119,7 +120,8 @@ function loginUser(e) {
         username = data.username;
         email = jsonForm.email;
         pass = jsonForm.pass;
-        $("#placeholderUsername").html("Welkom " + username);
+        $("#placeholderUsername").show();
+        $("#placeholderUsername").append("<button href='/winkelwagen' id='shoppingCart' class='ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-shop ui-btn-icon-right ui-btn-a'></button>Welkom " + username);
         $("#login").toggle();
         $("#logout").show();
         console.log(data);
@@ -131,9 +133,10 @@ function logoutUser(e) {
     fetch("/logout", {
             method: "post",
             headers: new Headers({ "Content-Type": "application/json" }),
-        }).then(function(response) {
-            return response.json();
         })
+        // .then(function(response) {
+        //     return response.json();
+        // })
         .then(function(data) {
             $("#placeholderUsername").html("");
             $("#login").toggle();
