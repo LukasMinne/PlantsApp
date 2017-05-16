@@ -18,14 +18,22 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
+// var app = express.createServer(),
+//     socket = io.listen(app),
+// var store = new express.session.MemoryStore;
+
 // set up BodyParser Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+// app.use(cookieParser());
+app.use(session({ secret: "a13jlsdf93240sfdsf9024sf90s", resave: false, saveUninitialized: true }));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 //initialize session
-app.use(session({ secret: 'sssssssshhhhhhhhhh' }));
+// app.use(express.cookieParser());
+// app.use(session({ secret: 'ssshhhhh' }));
 
 // routes 
 app.use(express.static(__dirname + '/public'));
@@ -37,6 +45,10 @@ app.get('/', function(req, response) {
 });
 
 app.get('/assortiment', function(req, response) {
+    // console.log(req.session);
+    // if (req.session.email != null) {
+    //     loginUser(req.session.email, req.session.pass);
+    // }
     response.render('assortiment.html', {});
 });
 
@@ -49,7 +61,12 @@ app.get('/route', function(req, response) {
     response.render('route.html', {});
 });
 
-app.get('/shoppingCart', function(req, response) {
+//todo fix
+app.get('/winkelwagen', function(req, response) {
+    // if (!req.session.user) {
+    //     return res.status(401).send();
+    // }
+    // return res.status(200).send("Welkom");
     response.render('shoppingCart.html', {});
 });
 
@@ -60,10 +77,6 @@ app.post('/load_plants', function(req, res) {
             plants: results
         })
     })
-});
-
-app.get('/get_plant', function(req, res) {
-    var plant = getPlantById(req.body.id);
 });
 
 app.post('/register_user', function(req, res) {
@@ -83,6 +96,9 @@ app.post('/login_user', function(req, res) {
                 if (result == true) {
                     //login correct
                     console.log("juist");
+                    req.session.email = req.body.user;
+                    req.session.pass = req.body.pass;
+                    console.log(req.session);
                     res.json({
                         username: results[0].name
                             // email: results[0].email
@@ -153,15 +169,6 @@ getPlants = (start, end) => {
     });
 };
 
-getPlantById = (id) => {
-    return new Promist(function(resolve) {
-        var statement = 'select * from plants where id = ?';
-        connection.query(statement, [id], function(error, results, fields) {
-            if (error) throw error;
-            resolve(results);
-        })
-    })
-};
 
 // server
 var server = http.createServer(app);

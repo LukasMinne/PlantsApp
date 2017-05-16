@@ -32,12 +32,20 @@ $(document).ready(function() {
     $("#logoutButton").on("click", logoutUser);
 
     registerServiceWorker();
+
+    // $("#bestelPlant").on("click", fillInPlants);
+
 });
 
 
 
 var reloadPage = function() {
     window.location.reload();
+};
+
+function fillInPlants() {
+    console.log("clicked");
+    if ($("article").empty());
 };
 
 function requestPlants(start) {
@@ -65,7 +73,7 @@ function requestPlants(start) {
                 }
                 html += "<a href='#popupPlant" + plant["id"] + "' data-id='" + plant["id"] + "' data-rel='popup' data-position-to='window' class='ui-btn ui-corner-all ui-shadow popupPlants' data-transition='pop'>" + plant["name"] + "</br>" + plant["latinName"] + "</a>" +
                     "<div data-role='popup' id='popupPlant" + plant["id"] + "' data-theme='a' class='ui-corner-all'>" +
-                    "<form>" +
+                    "<form id='formBestelPlant'>" +
                     "<div style='padding:10px 20px;'>" +
                     "<h3>" + plant["name"] + "</h3>" +
                     "<h3>" + plant["latinName"] + "</h3>" +
@@ -88,20 +96,22 @@ function registerUser(e) {
         accumulator[currentValue.name] = currentValue.value;
         return accumulator;
     }, {});
-    $.ajax({
-        type: "post",
-        contentType: "application/json",
-        url: "/register_user",
-        data: JSON.stringify(jsonForm)
-    }).success(function(data) {
+    fetch("/register_user", {
+        method: "post",
+        headers: new Headers({ "Content-Type": "application/json" }),
+        body: JSON.stringify(jsonForm)
+    }).then(function(response) {
+        return response.json();
+    }).then(function(data) {
         $("#popupRegister").popup("close");
-        username = $("#usernameRegister").val();
+        username = jsonForm.user;
         email = jsonForm.email;
         pass = jsonForm.pass;
-        $("#placeholderUsername").html("Welkom " + username);
+        $("#placeholderUsername").show();
+        $("#placeholderUsername").append("<a href='/html/shoppingCart.html' id='shoppingCart' class='ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-shop ui-btn-icon-right ui-btn-a'></a>Welkom " + username);
         $("#login").toggle();
         $("#logout").show();
-    })
+    });
 };
 
 function loginUser(e) {
@@ -110,18 +120,19 @@ function loginUser(e) {
         accumulator[currentValue.name] = currentValue.value;
         return accumulator;
     }, {});
-    $.ajax({
-        type: "post",
-        contentType: "application/json",
-        url: "/login_user",
-        data: JSON.stringify(jsonForm)
-    }).success(function(data) {
+    fetch("/login_user", {
+        method: "post",
+        headers: new Headers({ "Content-Type": "application/json" }),
+        body: JSON.stringify(jsonForm)
+    }).then(function(response) {
+        return response.json();
+    }).then(function(data) {
         $("#popupLogin").popup("close");
         username = data.username;
         email = jsonForm.email;
         pass = jsonForm.pass;
         $("#placeholderUsername").show();
-        $("#placeholderUsername").append("<button href='/winkelwagen' id='shoppingCart' class='ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-shop ui-btn-icon-right ui-btn-a'></button>Welkom " + username);
+        $("#placeholderUsername").append("<a href='/html/shoppingCart.html' id='shoppingCart' class='ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-shop ui-btn-icon-right ui-btn-a'></a>Welkom " + username);
         $("#login").toggle();
         $("#logout").show();
         console.log(data);

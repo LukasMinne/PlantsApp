@@ -178,16 +178,16 @@ header nav li {
 }
 
 header nav li a {
-    color: #FFFFFF !important;
+    color: #000000 !important;
     text-transform: capitalize;
 }
 
 header nav li a:hover {
-    background-color: green;
+    background-color: #FFFFFF;
 }
 
 header nav li:not(:last-child):after {
-    color: #FFFFFF;
+    color: #000000;
     content: "|";
     font-size: 1rem;
     vertical-align: top;
