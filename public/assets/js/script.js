@@ -121,22 +121,25 @@ function loginUser(e) {
         return accumulator;
     }, {});
     fetch("/login_user", {
-        method: "post",
-        headers: new Headers({ "Content-Type": "application/json" }),
-        body: JSON.stringify(jsonForm)
-    }).then(function(response) {
-        return response.json();
-    }).then(function(data) {
-        $("#popupLogin").popup("close");
-        username = data.username;
-        email = jsonForm.email;
-        pass = jsonForm.pass;
-        $("#placeholderUsername").show();
-        $("#placeholderUsername").append("<a href='/html/shoppingCart.html' id='shoppingCart' class='ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-shop ui-btn-icon-right ui-btn-a'></a>Welkom " + username);
-        $("#login").toggle();
-        $("#logout").show();
-        console.log(data);
-    })
+            method: "post",
+            headers: new Headers({ "Content-Type": "application/json" }),
+            body: JSON.stringify(jsonForm)
+        }).then(function(response) {
+            return response.json();
+        }).then(function(data) {
+            $("#popupLogin").popup("close");
+            username = data.username;
+            email = jsonForm.email;
+            pass = jsonForm.pass;
+            $("#placeholderUsername").show();
+            $("#placeholderUsername").append("<a href='/html/shoppingCart.html' id='shoppingCart' class='ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-shop ui-btn-icon-right ui-btn-a'></a>Welkom " + username);
+            $("#login").toggle();
+            $("#logout").show();
+            console.log(data);
+        })
+        // .catch() {
+        //     alert("verkeerd wachtwoord");
+        // }
 };
 
 function logoutUser(e) {
@@ -162,15 +165,15 @@ function logoutUser(e) {
 
 // service worker
 var registerServiceWorker = function() {
-    //     if ('serviceWorker' in navigator && 'PushManager' in window) {
-    //         navigator.serviceWorker.register('sw.js')
-    //             .then(function(sw) {
-    //                 console.log("Service worker registered", sw);
-    //             })
-    //             .catch(function(error) {
-    //                 console.error('Service worker error', error);
-    //             });
-    //     } else {
-    //         console.warn('Push messaging is not supported');
-    //     }
+    // if ('serviceWorker' in navigator && 'PushManager' in window) {
+    //     navigator.serviceWorker.register('sw.js')
+    //         .then(function(sw) {
+    //             console.log("Service worker registered", sw);
+    //         })
+    //         .catch(function(error) {
+    //             console.error('Service worker error', error);
+    //         });
+    // } else {
+    //     console.warn('Push messaging is not supported');
+    // }
 };

@@ -6,7 +6,9 @@ var app = express();
 var mysql = require("mysql");
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
-var sess;
+var loggedIn = false;
+var emailSaved;
+var passSaved;
 
 //mysql
 var connection = mysql.createConnection({
@@ -18,22 +20,11 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
-// var app = express.createServer(),
-//     socket = io.listen(app),
-// var store = new express.session.MemoryStore;
-
 // set up BodyParser Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-// app.use(cookieParser());
-app.use(session({ secret: "a13jlsdf93240sfdsf9024sf90s", resave: false, saveUninitialized: true }));
-// app.use(express.static(path.join(__dirname, 'public')));
-
-//initialize session
-// app.use(express.cookieParser());
-// app.use(session({ secret: 'ssshhhhh' }));
 
 // routes 
 app.use(express.static(__dirname + '/public'));
@@ -45,10 +36,12 @@ app.get('/', function(req, response) {
 });
 
 app.get('/assortiment', function(req, response) {
-    // console.log(req.session);
-    // if (req.session.email != null) {
-    //     loginUser(req.session.email, req.session.pass);
-    // }
+    console.log("email " + emailSaved);
+    console.log("pass  " + passSaved);
+    if (loggedIn) {
+        console.log("loggedIn");
+        loginUser(emailSaved, passSaved);
+    }
     response.render('assortiment.html', {});
 });
 
@@ -61,13 +54,10 @@ app.get('/route', function(req, response) {
     response.render('route.html', {});
 });
 
-//todo fix
 app.get('/winkelwagen', function(req, response) {
-    // if (!req.session.user) {
-    //     return res.status(401).send();
-    // }
-    // return res.status(200).send("Welkom");
-    response.render('shoppingCart.html', {});
+    if (loggedIn) {
+        response.render('shoppingCart.html', {});
+    }
 });
 
 app.post('/load_plants', function(req, res) {
@@ -82,6 +72,8 @@ app.post('/load_plants', function(req, res) {
 app.post('/register_user', function(req, res) {
     var user = registerUser(req.body.user, req.body.pass, req.body.email);
     user.then(function(results) {
+        loggedIn = true;
+        console.log(results);
         res.json("register OK");
     })
 });
@@ -96,15 +88,14 @@ app.post('/login_user', function(req, res) {
                 if (result == true) {
                     //login correct
                     console.log("juist");
-                    req.session.email = req.body.user;
-                    req.session.pass = req.body.pass;
-                    console.log(req.session);
+                    loggedIn = true;
                     res.json({
                         username: results[0].name
                             // email: results[0].email
                     })
                 } else {
                     //passwoord fout
+                    loggedIn = false;
                     console.log("fout");
                 }
             })
@@ -114,6 +105,7 @@ app.post('/login_user', function(req, res) {
 
 app.post('/logout', function(req, res) {
     console.log("logout");
+    loggedIn = false;
     res.redirect('/assortiment');
 });
 
@@ -125,8 +117,9 @@ app.post('/logout', function(req, res) {
 //2. nieuwe user opslaan
 
 registerUser = (user, pass, email) => {
+    emailSaved = email;
+    passSaved = pass;
     return new Promise(function(resolve) {
-
         bcrypt.hash(pass, saltRounds).then(function(hash) {
             // Store hash in your password DB. 
             var statement = 'insert into user(name, password, email) values (?,?,?)';
@@ -147,8 +140,10 @@ registerUser = (user, pass, email) => {
 //inloggen
 
 loginUser = (email, pass) => {
-    console.log("email login : " + email);
-    console.log("pass login : " + pass);
+    // console.log("email login : " + email);
+    // console.log("pass login : " + pass);
+    emailSaved = email;
+    passSaved = pass;
     return new Promise(function(resolve) {
         // console.log(email, pass);
         var statement = 'select * from user where email = ?';
