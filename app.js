@@ -40,7 +40,6 @@ app.get('/assortiment', function(req, response) {
     console.log("pass  " + passSaved);
     if (loggedIn) {
         console.log("loggedIn");
-        loginUser(emailSaved, passSaved);
     }
     response.render('assortiment.html', {});
 });

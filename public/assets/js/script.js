@@ -165,15 +165,15 @@ function logoutUser(e) {
 
 // service worker
 var registerServiceWorker = function() {
-    // if ('serviceWorker' in navigator && 'PushManager' in window) {
-    //     navigator.serviceWorker.register('sw.js')
-    //         .then(function(sw) {
-    //             console.log("Service worker registered", sw);
-    //         })
-    //         .catch(function(error) {
-    //             console.error('Service worker error', error);
-    //         });
-    // } else {
-    //     console.warn('Push messaging is not supported');
-    // }
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+        navigator.serviceWorker.register('sw.js')
+            .then(function(sw) {
+                console.log("Service worker registered", sw);
+            })
+            .catch(function(error) {
+                console.error('Service worker error', error);
+            });
+    } else {
+        console.warn('Push messaging is not supported');
+    }
 };
