@@ -2,9 +2,7 @@
 
 var counter = 0;
 var grid = ["a", "b"];
-var email;
-var pass;
-var username;
+var bestelling = {};
 
 $(document).ready(function() {
     //check jsfile
@@ -28,31 +26,61 @@ $(document).ready(function() {
 
     //hide logout button
     $("#logout").hide();
-    // $("#placeholderUsername").hide();
     $("#logoutButton").on("click", logoutUser);
 
     registerServiceWorker();
 
-    // $("#bestelPlant").on("click", fillInPlants);
+    //order button voor plant
+    // $('#plants').on('click', '.bestelPlant', function() {
+    //     console.log("clicked");
+    //     bestel();
+    // });
 
 });
 
+//
+function bestel(e) {
+    console.log("bestel");
+    // e.preventDefault();
+    //waarde ophalen
+    // id -> propertie van bestelling
+    var id = $("#plants data-id").val();
+    console.log(id);
+    // naam
+    var naam = $("#formBestelPlant > h3").val();
+    console.log(naam);
+    // hoeveelheid
+    var hoeveelheid = $("#formBestelPlant .ui-slider title").val();
+    console.log(hoeveelheid);
+    //toevoegen
+    bestelling[id]
 
+    //in winkelwagen steken
+
+    //(doorsturen naar sessie)
+
+}
 
 var reloadPage = function() {
     window.location.reload();
 };
 
-function fillInPlants() {
-    console.log("clicked");
-    if ($("article").empty());
-};
+// function fillInPlants() {
+//     console.log("clicked");
+//     if ($("article").empty());
+// };
 
 function requestPlants(start) {
     var end = start + 6;
+    console.log(document.cookie.split("="));
+    var cookie = document.cookie.split("=");
+    console.log(cookie[1]);
     fetch("/load_plants", {
             method: "post",
-            headers: new Headers({ "Content-Type": "application/json" }),
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Authorization": cookie[1]
+            }),
             body: JSON.stringify({
                 start,
                 end
@@ -81,7 +109,7 @@ function requestPlants(start) {
                     "<h3>" + plant["size"] + "</h3>" +
                     "<label for='slider-mini'>Hoeveelheid:</label>" +
                     "<input type='range' name='slider-mini' id='slider-plants' value='500' min='0' max='10000' data-highlight='true' />" +
-                    "<button id='bestelPlant' data-role='button' class='ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check'>Bestel</button>" +
+                    "<a href='/assortiment' onclick='bestel()' data-role='button' class='bestelPlant ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check'>Bestel</a>" +
                     "</div>" +
                     "</form>" +
                     "</div>";
@@ -90,11 +118,32 @@ function requestPlants(start) {
         });
 };
 
+// function saveOrder(e) {
+//     e.preventDefault();
+//     var jsonForm = $("#formBestelPlant").serializeArray().reduce(function(accumulator, currentValue) {
+//         accumulator[currentValue.name] = currentValue.value;
+//         return accumulator;
+//     }, {});
+//     console.log(jsonForm);
+//     fetch("/save_order", {
+//         method: "post",
+//         headers: new Headers({ "Content-Type": "application/json" }),
+//         body: JSON.stringify(jsonForm)
+//     }).then(function(response) {
+//         return response.json();
+//     }).then(function(data) {
+//         console.log(data);
+//     })
+// }
+
 function registerUser(e) {
     e.preventDefault();
     var jsonForm = $("#popupRegister input").serializeArray().reduce(function(accumulator, currentValue) {
         accumulator[currentValue.name] = currentValue.value;
+        // if (validateEmail(accumulator.email)) {
         return accumulator;
+        // }
+        // alert("vul een username, passwoord en email in");
     }, {});
     fetch("/register_user", {
         method: "post",
@@ -103,12 +152,10 @@ function registerUser(e) {
     }).then(function(response) {
         return response.json();
     }).then(function(data) {
+        // console.log(data);
         $("#popupRegister").popup("close");
-        username = jsonForm.user;
-        email = jsonForm.email;
-        pass = jsonForm.pass;
         $("#placeholderUsername").show();
-        $("#placeholderUsername").append("<a href='/html/shoppingCart.html' id='shoppingCart' class='ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-shop ui-btn-icon-right ui-btn-a'></a>Welkom " + username);
+        $("#placeholderUsername").append("<a href='/html/shoppingCart.html' id='shoppingCart' class='ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-shop ui-btn-icon-right ui-btn-a'></a>Welkom " + data.username);
         $("#login").toggle();
         $("#logout").show();
     });
@@ -118,28 +165,24 @@ function loginUser(e) {
     e.preventDefault();
     var jsonForm = $("#popupLogin input").serializeArray().reduce(function(accumulator, currentValue) {
         accumulator[currentValue.name] = currentValue.value;
-        return accumulator;
+        if (validateEmail(accumulator.user)) {
+            return accumulator;
+        }
+        alert("vul een email of passwoord in");
     }, {});
     fetch("/login_user", {
-            method: "post",
-            headers: new Headers({ "Content-Type": "application/json" }),
-            body: JSON.stringify(jsonForm)
-        }).then(function(response) {
-            return response.json();
-        }).then(function(data) {
-            $("#popupLogin").popup("close");
-            username = data.username;
-            email = jsonForm.email;
-            pass = jsonForm.pass;
-            $("#placeholderUsername").show();
-            $("#placeholderUsername").append("<a href='/html/shoppingCart.html' id='shoppingCart' class='ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-shop ui-btn-icon-right ui-btn-a'></a>Welkom " + username);
-            $("#login").toggle();
-            $("#logout").show();
-            console.log(data);
-        })
-        // .catch() {
-        //     alert("verkeerd wachtwoord");
-        // }
+        method: "post",
+        headers: new Headers({ "Content-Type": "application/json" }),
+        body: JSON.stringify(jsonForm)
+    }).then(function(response) {
+        return response.json();
+    }).then(function(data) {
+        $("#popupLogin").popup("close");
+        $("#placeholderUsername").show();
+        $("#placeholderUsername").append("<a href='/html/shoppingCart.html' id='shoppingCart' class='ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-shop ui-btn-icon-right ui-btn-a'></a>Welkom " + data.username);
+        $("#login").toggle();
+        $("#logout").show();
+    })
 };
 
 function logoutUser(e) {
@@ -158,22 +201,24 @@ function logoutUser(e) {
         });
 };
 
-// function validateEmail(email) {
-//     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-//     return re.test(email);
-// }
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (re.test(email)) {
+        return true;
+    } else { return false };
+}
 
 // service worker
 var registerServiceWorker = function() {
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
-        navigator.serviceWorker.register('sw.js')
-            .then(function(sw) {
-                console.log("Service worker registered", sw);
-            })
-            .catch(function(error) {
-                console.error('Service worker error', error);
-            });
-    } else {
-        console.warn('Push messaging is not supported');
-    }
+    // if ('serviceWorker' in navigator && 'PushManager' in window) {
+    //     navigator.serviceWorker.register('sw.js')
+    //         .then(function(sw) {
+    //             console.log("Service worker registered", sw);
+    //         })
+    //         .catch(function(error) {
+    //             console.error('Service worker error', error);
+    //         });
+    // } else {
+    //     console.warn('Push messaging is not supported');
+    // }
 };
