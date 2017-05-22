@@ -3,6 +3,7 @@
 var counter = 0;
 var grid = ["a", "b"];
 var bestelling = {};
+var connection;
 
 $(document).ready(function() {
     //check jsfile
@@ -29,7 +30,9 @@ $(document).ready(function() {
     $("#logoutButton").on("click", logoutUser);
 
     registerServiceWorker();
+    checkConnection();
 
+    // $('#plants').on('click', 'input', bestel);
     //order button voor plant
     // $('#plants').on('click', '.bestelPlant', function() {
     //     console.log("clicked");
@@ -42,16 +45,23 @@ $(document).ready(function() {
 function bestel(e) {
     console.log("bestel");
     // e.preventDefault();
+
     //waarde ophalen
     // id -> propertie van bestelling
-    var id = $("#plants data-id").val();
+    console.log("#formBestelPlant");
+    var id = $("#plants > data-id").val();
+    var id2 = $('#plants').find('h3').val();
     console.log(id);
+    console.log(id2);
+
     // naam
     var naam = $("#formBestelPlant > h3").val();
     console.log(naam);
+
     // hoeveelheid
-    var hoeveelheid = $("#formBestelPlant .ui-slider title").val();
+    var hoeveelheid = $("#formBestelPlant sliderPlants").val();
     console.log(hoeveelheid);
+
     //toevoegen
     bestelling[id]
 
@@ -101,15 +111,15 @@ function requestPlants(start) {
                 }
                 html += "<a href='#popupPlant" + plant["id"] + "' data-id='" + plant["id"] + "' data-rel='popup' data-position-to='window' class='ui-btn ui-corner-all ui-shadow popupPlants' data-transition='pop'>" + plant["name"] + "</br>" + plant["latinName"] + "</a>" +
                     "<div data-role='popup' id='popupPlant" + plant["id"] + "' data-theme='a' class='ui-corner-all'>" +
-                    "<form id='formBestelPlant'>" +
+                    "<form id='formBestelPlant' method='post' action='/assortiment' onsubmit='bestel()'>" +
                     "<div style='padding:10px 20px;'>" +
                     "<h3>" + plant["name"] + "</h3>" +
                     "<h3>" + plant["latinName"] + "</h3>" +
                     "<h3>" + plant["age"] + "</h3>" +
                     "<h3>" + plant["size"] + "</h3>" +
                     "<label for='slider-mini'>Hoeveelheid:</label>" +
-                    "<input type='range' name='slider-mini' id='slider-plants' value='500' min='0' max='10000' data-highlight='true' />" +
-                    "<a href='/assortiment' onclick='bestel()' data-role='button' class='bestelPlant ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check'>Bestel</a>" +
+                    "<input type='range' name='sliderPlants' value='500' min='0' max='10000' data-highlight='true' />" +
+                    "<input type='submit' value='Bestel' data-role='button' class='bestelPlant ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check'></>" +
                     "</div>" +
                     "</form>" +
                     "</div>";
@@ -210,15 +220,58 @@ function validateEmail(email) {
 
 // service worker
 var registerServiceWorker = function() {
-    // if ('serviceWorker' in navigator && 'PushManager' in window) {
-    //     navigator.serviceWorker.register('sw.js')
-    //         .then(function(sw) {
-    //             console.log("Service worker registered", sw);
-    //         })
-    //         .catch(function(error) {
-    //             console.error('Service worker error', error);
-    //         });
-    // } else {
-    //     console.warn('Push messaging is not supported');
-    // }
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+        navigator.serviceWorker.register('sw.js')
+            .then(function(sw) {
+                console.log("Service worker registered", sw);
+            })
+            .catch(function(error) {
+                console.error('Service worker error', error);
+            });
+    } else {
+        console.warn('Push messaging is not supported');
+    }
 };
+
+function checkConnection() {
+    setInterval(checkIfOnline, 3000);
+}
+
+var checkIfOnline = function() {
+    if (navigator.onLine)
+        isOnline();
+    else
+        isOffline();
+};
+
+
+var isOnline = function() {
+    console.log("je bent online");
+    // $("#alert").empty();
+    connection = true;
+
+
+};
+var isOffline = function() {
+    if (connection) {
+        console.log("je bent offline");
+        $("#map").html("<a href='#' class='ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext'>Geen verbinding</a><br/><p>Geen internet</p>")
+        connection = false;
+    }
+};
+
+function initMap() {
+    var uluru = {
+        lat: 51.067749,
+        lng: 3.346367
+    };
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 17,
+        center: uluru,
+    });
+    var marker = new google.maps.Marker({
+        position: uluru,
+        map: map,
+        animation: google.maps.Animation.BOUNCE
+    });
+}

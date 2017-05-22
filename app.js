@@ -60,18 +60,13 @@ app.use(session({
 app.get('/assortiment', function(req, res) {
     console.log("assortiment")
     console.log(req.session);
-    if (req.session.login) {
+    if (req.session.user) {
+        console.log("logged in with session");
         res.render("assortiment.html", {
             userName: req.session.user,
             loggedIn: true
         });
     }
-    // app.get('/assortiment', requireLogin, function(req, res) {
-    //     res.render("assortiment.html", {
-    //         userName: req.session.user,
-    //         loggedIn: true
-    //     });
-    // });
     res.render("assortiment.html", {
         userName: req.session.user,
         loggedIn: false
@@ -95,6 +90,11 @@ app.get('/route', function(req, response) {
 
 // app.post('/save_order', function(req, response) {
 
+// });
+
+// app.post('/doBestelling', function(req, res) {
+//     console.log("bestelled");
+//     console.log(req.body);
 // });
 
 app.post('/load_plants', function(req, res) {
@@ -140,7 +140,7 @@ app.post('/login_user', function(req, res) {
                         // loggedInUsers.push(results[0].name);
                         req.session.login = true;
                         req.session.user = results[0].name;
-                        req.session.save();
+                        // req.session.save();
                         console.log("login")
                         console.log(req.session);
                         res.json({

@@ -32,37 +32,8 @@
         </header>
 
         <div id="map"></div>
-        <script>
-            function initMap() {
-                var uluru = {
-                    lat: 51.067749,
-                    lng: 3.346367
-                };
-                var map = new google.maps.Map(document.getElementById('map'), {
-                    zoom: 17,
-                    center: uluru,
-                });
-                var marker = new google.maps.Marker({
-                    position: uluru,
-                    map: map,
-                    animation: google.maps.Animation.BOUNCE
-                });
-            }
-        </script>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ30z-L-6zeuELMsPWkbR8QhNs1EVOa2w&callback=initMap">
         </script>
-
-        <!--<div style="height:500px;width:1000px;max-width:100%;list-style:none; transition: none;overflow:hidden; margin-left: auto; margin-right: auto;">
-            <div id="gmap-canvas" style="height:100%; width:100%;max-width:100%;">
-                <iframe style="height:100%;width:100%;border:0;" frameborder="0" src="https://www.google.com/maps/embed/v1/place?q=Boomkwekerij+Geert+Rogge,+Ruiselede,+België&key=AIzaSyAK2_9Fy5II0qQ4NLpyNLrJbm3s8FWSTHo"></iframe>
-            </div>
-        </div>-->
-
-        <!--<div id="map"></div>
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ30z-L-6zeuELMsPWkbR8QhNs1EVOa2w&callback=initMap">-->
-        </script>
-        <!--<div id="footer">AIzaSyCZ30z-L-6zeuELMsPWkbR8QhNs1EVOa2w                     AIzaSyAN0om9mFmy1QN6Wf54tXAowK4eT0ZUPrU</div>-->
-
         <footer class="ui-grid-b" data-role="footer">
             <hr>
             <div class="ui-block-a">
