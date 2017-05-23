@@ -1,10 +1,11 @@
-var bodyParser = require('body-parser');
-var http = require('http');
-var express = require('express');
-var session = require('express-session');
-var app = express();
-var mysql = require("mysql");
-var bcrypt = require('bcrypt');
+const bodyParser = require('body-parser');
+const http = require('http');
+const express = require('express');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const app = express();
+const mysql = require("mysql");
+const bcrypt = require('bcrypt');
 const saltRounds = 10;
 // var loggedInUsers = [];
 
@@ -33,12 +34,16 @@ app.get('/', function(req, response) {
     response.render("index.html", "");
 });
 
+app.use(cookieParser());
 app.use(session({
-    secret: 'sdojals23jk4d8f0gks093lfi',
+    secret: 'my uber safe secret %#*$^&$#',
+    cookie: {
+        maxAge: 3600000,
+        path: '/'
+    },
     resave: false,
     saveUninitialized: true
-        // cookie: { expires: false, httpOnly: false }
-}))
+}));
 
 // app.use(function(req, res, next) {
 //     if (req.session && req.session.login) {
@@ -82,15 +87,6 @@ app.get('/route', function(req, response) {
     response.render('route.html', {});
 });
 
-// app.get('/winkelwagen', function(req, response) {
-
-//         response.render('shoppingCart.html', {});
-
-// });
-
-// app.post('/save_order', function(req, response) {
-
-// });
 
 // app.post('/doBestelling', function(req, res) {
 //     console.log("bestelled");
@@ -101,9 +97,59 @@ app.post('/load_plants', function(req, res) {
     var plants = getPlants(req.body.start, req.body.end);
     plants.then(function(results) {
         res.json({
-            plants: results
+            plants: results,
+            cart: req.session.cart || []
         })
     })
+});
+
+app.get('/api/flowers/:id', function(req, res) {
+    var plant = getPlantById(req.body.id);
+    plant.then(function(result) {
+        res.json({
+            plants: result,
+        })
+    });
+    // database
+    //     .getFlowerById(req.params.id)
+    //     .then(flower => {
+    //         res.json(flower);
+    //     })
+    //     .catch(err => {
+    //         res.status(500).json({ error: err });
+    //     });
+});
+
+app.get('/api/add-to-cart/:id', function(req, res) {
+    var plant = getPlantById(req.body.id);
+    plant.then(function(result) {
+        if (req.session.cart) {
+            req.session.cart.push(result);
+        } else {
+            req.session.cart = [result];
+        }
+        res.json(req.session.cart);
+    });
+    //   database
+    //     .getFlowerById(req.params.id)
+    //     .then(flower => {
+    //       if(req.session.cart){
+    //         req.session.cart.push(flower);
+    //       } else {
+    //         req.session.cart = [flower];
+    //       }
+    //       res.json(req.session.cart);
+    //     })
+    //     .catch(err => {
+    //       res.status(500).json({ error: err });
+    //     });
+});
+
+app.get('/api/remove-from-cart/:idx', function(req, res) {
+    if (req.session.cart) {
+        req.session.cart.splice(req.params.idx, 1);
+    }
+    res.json(req.session.cart);
 });
 
 function validateEmail(email) {
@@ -226,15 +272,15 @@ getPlants = (start, end) => {
     });
 };
 
-// saveOrder = (namePlant, amount) => {
-//     return new Promise(function(resolve) {
-//         var statement = 'insert into orders(namePlant, amount) values (?,?)';
-//         connection.query(statement, [namePlant, amount], function(error, results, fields) {
-//             if (error) throw error;
-//             resolve(results);
-//         })
-//     });
-// }
+getPlantById = (id) => {
+    return new Promise(function(resolve) {
+        var statement = 'select * from plants where id = ?';
+        connection.query(statement, [id], function(error, results, fields) {
+            if (error) throw error;
+            resolve(results);
+        });
+    });
+};
 
 // server
 var server = http.createServer(app);

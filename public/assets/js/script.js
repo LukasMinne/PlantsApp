@@ -2,8 +2,16 @@
 
 var counter = 0;
 var grid = ["a", "b"];
-var bestelling = {};
+
 var connection;
+var bestellingen = [];
+
+var $error = $('#error');
+var $allFlowers = $('#plants');
+var $selectedFlower = $('#selected-flower');
+var $myCart = $('#my-cart');
+var $loadingThing = $('#loading-thing');
+var selectedFlowerId = -1;
 
 $(document).ready(function() {
     //check jsfile
@@ -39,6 +47,11 @@ $(document).ready(function() {
     //     bestel();
     // });
 
+    fillInPlants();
+
+    //shoppingCart
+    bindEventHandlers();
+
 });
 
 //
@@ -48,26 +61,23 @@ function bestel(e) {
 
     //waarde ophalen
     // id -> propertie van bestelling
-    console.log("#formBestelPlant");
-    var id = $("#plants > data-id").val();
-    var id2 = $('#plants').find('h3').val();
+    var id = $("#plants a").data("id");
     console.log(id);
-    console.log(id2);
 
     // naam
-    var naam = $("#formBestelPlant > h3").val();
+    var idSelector = "#popupPlant-" + id;
+    var naam = $("#formBestelPlant").find("#popupPlant-" + idSelector)[0].dataset.name;
     console.log(naam);
 
     // hoeveelheid
-    var hoeveelheid = $("#formBestelPlant sliderPlants").val();
+    var hoeveelheid = $("#formBestelPlant").find(".sliderPlants").val();
     console.log(hoeveelheid);
 
     //toevoegen
-    bestelling[id]
+    var bestelling = { id: id, naam: naam, hoeveelheid: hoeveelheid };
+    bestellingen.push(bestelling);
 
     //in winkelwagen steken
-
-    //(doorsturen naar sessie)
 
 }
 
@@ -75,10 +85,19 @@ var reloadPage = function() {
     window.location.reload();
 };
 
-// function fillInPlants() {
-//     console.log("clicked");
-//     if ($("article").empty());
-// };
+function fillInPlants() {
+    console.log("clicked");
+    if (bestellingen == null) {
+        $("article").html("<h2>Geen planten in winkelwagen</h2>");
+    }
+    if (bestellingen != null) {
+        var html = $("article").html("<ul>");
+        bestellingen.forEach(function(bestelling) {
+            html += "<li>" + bestelling.naam + "-- aantal:" + bestelling.hoeveelheid + "</li>";
+        })
+    }
+    html += "</ul>";
+};
 
 function requestPlants(start) {
     var end = start + 6;
@@ -109,16 +128,16 @@ function requestPlants(start) {
                     html += "<div class='ui-block-b'>";
                     counter--;
                 }
-                html += "<a href='#popupPlant" + plant["id"] + "' data-id='" + plant["id"] + "' data-rel='popup' data-position-to='window' class='ui-btn ui-corner-all ui-shadow popupPlants' data-transition='pop'>" + plant["name"] + "</br>" + plant["latinName"] + "</a>" +
-                    "<div data-role='popup' id='popupPlant" + plant["id"] + "' data-theme='a' class='ui-corner-all'>" +
+                html += "<a href='#popupPlant-" + plant["id"] + "' data-id='" + plant["id"] + "' data-rel='popup' data-position-to='window' class='ui-btn ui-corner-all ui-shadow popupPlants' data-transition='pop'>" + plant["name"] + "</br>" + plant["latinName"] + "</a>" +
+                    "<div data-role='popup' id='popupPlant-" + plant["id"] + "' data-theme='a' class='ui-corner-all'>" +
                     "<form id='formBestelPlant' method='post' action='/assortiment' onsubmit='bestel()'>" +
                     "<div style='padding:10px 20px;'>" +
-                    "<h3>" + plant["name"] + "</h3>" +
+                    "<h3 data-name='" + plant["name"] + "' class='plantName'>" + plant["name"] + "</h3>" +
                     "<h3>" + plant["latinName"] + "</h3>" +
                     "<h3>" + plant["age"] + "</h3>" +
                     "<h3>" + plant["size"] + "</h3>" +
                     "<label for='slider-mini'>Hoeveelheid:</label>" +
-                    "<input type='range' name='sliderPlants' value='500' min='0' max='10000' data-highlight='true' />" +
+                    "<input type='range' name='sliderPlants' class='sliderPlants' value='500' min='0' max='10000' data-highlight='true' />" +
                     "<input type='submit' value='Bestel' data-role='button' class='bestelPlant ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check'></>" +
                     "</div>" +
                     "</form>" +
@@ -274,4 +293,124 @@ function initMap() {
         map: map,
         animation: google.maps.Animation.BOUNCE
     });
+}
+
+function bindEventHandlers() {
+    $allFlowers.on('click', '.bestelPlantr', selectFlower);
+    $selectedFlower.on('click', '.add-to-cart', function() {
+        addToCart(selectedFlowerId);
+    });
+    $myCart.on('click', '.remove-from-cart', function() {
+        var idx = $(this).closest('.cart-item-container').data('idx');
+        removeFromCart(idx);
+    });
+}
+
+// function loadAllFlowers() {
+//     toggleLoading(true);
+//     $.ajax('/api/flowers')
+//         .done(function(data) {
+//             toggleError(false);
+//             $allFlowers.empty();
+//             printCart(data.cart);
+//             data.flowers.forEach(function(flower) {
+//                 $allFlowers.append(
+//                     '<li class="flower-container" data-id="' + flower.id + '">' +
+//                     flower.name + ' - ' + flower.color + ' (&euro; ' + flower.price + ') ' +
+//                     '<button class="select-flower">Select this flower!</button>' +
+//                     '</li>'
+//                 );
+//             });
+//         })
+//         .fail(function(err) {
+//             toggleError(true, err.responseText);
+//         })
+//         .always(function() {
+//             toggleLoading(false);
+//         });
+// }
+
+function addToCart(id) {
+    toggleLoading(true);
+    $.ajax('/api/add-to-cart/' + id)
+        .done(function(cart) {
+            toggleError(false);
+            printCart(cart);
+        })
+        .fail(function(err) {
+            toggleError(true, err.responseText);
+        })
+        .always(function() {
+            toggleLoading(false);
+            unSelectFlower();
+        })
+}
+
+function removeFromCart(id) {
+    toggleLoading(true);
+    $.ajax('/api/remove-from-cart/' + id)
+        .done(function(cart) {
+            toggleError(false);
+            printCart(cart);
+        })
+        .fail(function(err) {
+            toggleError(true, err.responseText);
+        })
+        .always(function() {
+            toggleLoading(false);
+        })
+}
+
+function getFlowerById(id, callback) {
+    toggleLoading(true);
+    $.ajax('/api/flowers/' + id)
+        .done(function(flower) {
+            toggleError(false);
+            if (callback) {
+                callback(flower);
+            }
+        })
+        .fail(function(err) {
+            toggleError(true, err.responseText);
+        })
+        .always(function() {
+            toggleLoading(false);
+        })
+}
+
+function printCart(cart) {
+    var total = 0;
+    $myCart.empty();
+    cart.forEach(function(item, idx) {
+        total += parseInt(item.price, 10);
+        $myCart.append('<li class="cart-item-container" data-idx="' + idx + '">' + item.name + ' (&euro; ' + item.price + ') <button class="remove-from-cart">Remove from cart</button></li>')
+    });
+    $myCart.append('<hr /><li><p><strong>TOTAL: &euro; ' + total + '</strong></p></li>')
+}
+
+function selectFlower(event) {
+    var id = $(this).closest('.flower-container').data('id');
+    selectedFlowerId = id;
+    getFlowerById(id, setSelectedFlower);
+}
+
+function unSelectFlower() {
+    $selectedFlower.empty();
+    selectedFlowerId = -1;
+}
+
+function setSelectedFlower(flower) {
+    if (!flower) return;
+    $selectedFlower.html(
+        'Selected: ' + flower.name + ' <button class="add-to-cart">Add to cart!</button>'
+    );
+}
+
+function toggleError(isVisible, txt) {
+    $error.text(txt || '');
+    $error.css('display', isVisible ? 'block' : 'none');
+}
+
+function toggleLoading(isVisible) {
+    $loadingThing.css('display', isVisible ? 'block' : 'none');
 }
